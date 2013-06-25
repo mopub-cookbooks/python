@@ -1,0 +1,30 @@
+---
+driver_plugin: vagrant
+platforms:
+  - name: ubuntu-12.04
+    driver_config:
+      box: opscode-ubuntu-12.04
+      box_url: https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04_provisionerless.box
+      require_chef_omnibus: latest
+      run_list: ["recipe[apt]"]
+
+suites:
+- name: default
+  run_list:
+  - recipe[python]
+- name: exert
+  run_list:
+  - recipe[python]
+  - recipe[python::test_exert]
+- name: virtualenv
+  run_list: 
+  - recipe[python]
+  - recipe[python::test_virtualenv]
+- name: source
+  run_list:
+  - recipe[build-essential]
+  - recipe[python::source]
+  attributes:
+    python:
+      install_method: source
+      prefix_dir: /opt
